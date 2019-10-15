@@ -1,8 +1,10 @@
 from django.http import HttpResponse
 from django.shortcuts import render
+from django.contrib import messages
 from .models import *
 def index(request):
     return render(request,'sam.html')
+
 def form_submission(request):
     #print("hello world")
     clg_name = request.POST["college_name"]
