@@ -1,0 +1,917 @@
+<html>
+<title>admin panel</title>
+<link rel = "icon" href =  "static\logo.jpg" type = "image/x-icon"> 
+{% extends "a.html" %}
+{% block content %}
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+    .xlup1 .xlup.active
+    {   
+      background-color: orange;
+    }
+    .xlup{
+      color: orange;
+      border: 1px solid orange;
+    }
+    .xlup:hover{
+      color: white;
+    }
+    .p1 .p.active
+    {
+        
+      background-color: rgb(61, 190, 61);
+    }
+    .p{
+      color: rgb(61, 190, 61);
+      border: 1px solid rgb(61, 190, 61);
+    }
+    .p:hover{
+      color: white;
+    }
+    .other{
+      color: #5b5bfd;
+      border: 1px solid #5b5bfd;
+    }
+    .other:hover{
+      color: white;
+    }
+    .t{
+      vertical-align: middle;
+    }
+  </style>
+  </head>
+    {% csrf_token %}
+<body>
+  <div class="row">
+    <div class="col-lg-12 col-xs-12 col-md-12">
+      <div class="container">
+        <div class="row frame pl-3">
+          <div class="col-4 pb-2"style="background-color: rgba(9, 9, 14, 0.5);">
+            <div class= "row mt-5 pl-5">  
+              <ul class="nav nav-pills nav-justified">
+                <div class="col-lg-12">
+                  <li class="nav-item mb-5 p1">
+                    <a class="nav-link p" data-toggle = "pill" href = "#profileTab" id = "profile">Profile</a>
+                  </li>
+                  {% if request.user.is_superuser %}
+                <li class="nav-item other1">
+                  <a class="nav-link active other" data-toggle = "pill" href = "#orders" id = "ordersTab">Registered users</a>
+                </li>
+                
+                </div>
+                
+                <div class="col-lg-12 mt-1">
+                <li class="nav-item other1">
+                  <a class="nav-link other" data-toggle = "pill" href = "#regHead" id="manageTab">Authorize colleges</a>
+                </li>
+              </div>
+              
+              </ul>
+          </div>
+          <div id="regHead" class="tab-pane container top50">
+            <div class= "row mt-5" id="regMenus" style="display: none;">
+                <ul class="nav nav-pills nav-justified">
+                  <div class="col-lg-6 pl-5 pr-1">
+                    <li class="nav-item other1">
+                      <a class="nav-link other" data-toggle = "pill" href = "#cour_reg" id = "c_reg">Auth. Colleges</a>
+                    </li>
+                  </div>
+                  <div class="col-lg-6 pl-0 pr-4">
+                  <li class="nav-item other1">
+                    <a class="nav-link other" data-toggle = "pill" href = "#admin_reg" id = "ad_reg">New college authorization</a>
+                  </li>
+                </div>
+                <div class="col-lg-6 pl-5 pr-1">
+                  <br>
+                  <li class="nav-item other1">
+                    <a class="nav-link other" data-toggle = "pill" href = "#changeTable" id = "change_link">Update Requests</a>
+                  </li>
+                </div>
+                </ul>
+              </div>
+              {% endif %}
+              {% if request.user.is_staff or request.user.is_superuser %}
+              <div class="col-md-12 mt-1">
+                <ul class="nav nav-pills nav-justified">
+              <li class="nav-item xlup1 mt-5">
+                <a class="nav-link xlup"  href = "{% url 'simple_upload' %}" id = "xlTab">Upload Data</a>
+              </li>
+            </div>
+            {% endif %}
+            {% if request.user.is_staff %}
+            <div class="col-lg-12 mt-1">
+              <li class="nav-item other1">
+                <a class="nav-link other" href = "{% url 'detailpage' 1 %}" id = "">View college information</a>
+              </li>
+            </div>
+            {% endif %}
+            </ul>
+          </div>
+          </div>
+          <div class="col-lg-8">
+            <!--------------Profile Tab ---------------->
+            <div class = "tab-content mt-1">
+              <div id = "profileTab" class="row tab-pane container top50" style="display: none;">
+                <div class="card card-outline-secondary">
+                  <div class="card-header ">
+                    <h3 class="mb-0">User Information</h3>
+                    <input type="button" class="btn btn-success ml-2" onclick="location.href='{% url 'change_password' %}'" value="Change password" style="float: right;">
+                    <input type="button" id="edit" class="btn btn-secondary" value="Edit profile" style="float: right;">
+                </div>
+                  <div class="card-body">
+                      <form class="form" id="formProfile" role="form" autocomplete="off">
+                          <div class="form-group row">
+                              <label class="col-lg-3 col-form-label form-control-label">First name:</label>
+                              <div class="col-lg-9">
+                                  <input class="form-control first_name" type="text" placeholder="None" value="{{profileInfo.username}}" required>
+                              </div>
+                          </div>
+                          <div class="form-group row">
+                              <label class="col-lg-3 col-form-label form-control-label">Last name:</label>
+                              <div class="col-lg-9">
+                                  <input class="form-control last_name" type="text" placeholder="None" value="{{profileInfo.last_name}}" required>
+                              </div>
+                          </div>
+                          <div class="form-group row">
+                              <label class="col-lg-3 col-form-label form-control-label">Email:</label>
+                              <div class="col-lg-9">
+                                  <input class="form-control email" type="email" placeholder="None" value="{{profileInfo.email}}" required>
+                              </div>
+                          </div>
+                            <div class="form-group row">
+                              <label class="col-lg-3 col-form-label form-control-label">Phone number:</label>
+                              <div class="col-lg-9">
+                                  <input class="form-control phone_number" type="number" placeholder="None" value="{{profileInfo.Phone_no}}" minlength="10" maxlength="10">
+                              </div>
+                          </div>
+                          <div class="form-group row" id = "controls" style="display: none;">
+                            <label class="col-lg-3 col-form-label form-control-label"></label>
+                            <div class="col-lg-9">
+                                <input type="reset" class="btn btn-secondary" value="Cancel">
+                                <input type="submit" class="btn btn-primary" value="Save Changes">
+                            </div>
+                        </div>
+                      </form>
+                  </div>
+              </div>
+              </div>
+            </div>
+  
+            <!-----------------Auth. college accounts--------------------->
+            <div class = "tab-content">
+              <div class="col-lg-12 p-0">
+                  <div class = "tab-content">
+                    <div id="cour_reg" class="tab-pane container top50">
+                      <div class="col-lg-12 p-0" id = "scroll">
+                        <table id="AuthTable" class="table table-responsive table-bordered table-dark" >
+                          {% if Auth_clg %}
+                          <thead class="thead-dark">
+                              <tr>
+                                <th hidden>College ID</th>
+                                <th>Institute code</th>
+                                <th>user name</th>
+                                <th>Registration Date</th>
+                                <th colspan="5" class="text-center">Actions</th>
+                              </tr>
+                            </thead>
+                          {% for clg in Auth_clg %}
+                          <tr id="clg-{{clg.id}}">
+                              <td class="userName t" name="source">{{clg.staff_clg_code}}</td>
+                              <td class="userAddress t" name="destination">{{clg.username}}</td>
+                              <td class="userAge t" name="parcel_weight">{{clg.Rdate}}</td>
+                              <td align="center">
+                                  <button class='btn btn btn-outline-success form-control' onClick="AutheditUser({{clg.id}})" data-toggle="modal" data-target="#AuthModal">VIEW</button>
+                              </td>
+                              <td align="center">
+                                  <button class="btn btn btn-outline-danger form-control" onClick="AuthdeleteUser({{clg.id}})">DELETE</button>
+                              </td>
+                          </tr>
+                          {% endfor %}
+                          {% else %}
+                      <h1 class="text-white">No Authorized Colleges</h1>
+                          {% endif %}
+                        </table>
+                      </div>
+                        </div>
+                        </div>
+                        </div>
+          </div>
+      <!------------------registered users---------------------->
+      {% if request.user.is_superuser %}
+          <div class="row">
+            <div class="col-lg-12 p-0">
+              <div class = "tab-content">
+                <div id="orders" class="tab-pane container top50">
+                  <div class="col-md-11 p-0" id = "scroll">
+                    <table id="RegTable" class="table table-responsive table-bordered table-dark mt-1">
+                      
+                      {% if users %}
+                      <thead>
+                          <tr>
+                            <th>ID</th>
+                            <th>Username</th>
+                            <th>Registration Date</th>
+                            <th colspan="5" class="text-center">Actions</th>
+                          </tr>
+                        </thead>
+                      {% for user in users %}
+                      <tr id="user-{{user.id}}">
+                          <td class="userName" name="source">{{user.id}}</td>
+                          <td class="userAddress" name="destination">{{user.username}}</td>
+                          <td class="userAge" name="parcel_weight">{{user.Rdate}}</td>
+                          <td align="center">
+                              <button class='btn btn btn-outline-success form-control' onClick="editUser({{user.id}})" data-toggle="modal" data-target="#myModal">VIEW</button>
+                          </td>
+                          <td align="center">
+                              <button class="btn btn btn-outline-danger form-control" onClick="deleteUser({{user.id}})">DELETE</button>
+                          </td>
+                      </tr>
+                      {% endfor %}
+                      {% else %}
+                  <h1>No registered users</h1>
+                      {% endif %}
+                    </table>
+                  </div>
+                    </div>
+                    </div>
+                    </div>
+          </div>
+          {% endif %}
+        <!-------------------------Change Request table----------->
+        {% if request.user.is_superuser %}
+          <div class="row">
+            <div class="col-lg-12 p-0">
+              <div class = "tab-content">
+                <div id="changeTable" class="tab-pane container top50">
+                  <div class="col-md-11 p-0" id = "scroll">
+                    <table id="chngTable" class="table table-bordered table-responsive table-dark mt-1"> 
+                      {% if changes %}
+                      <thead>
+                          <tr>
+                            <th>Institute code</th>
+                            <th>College name</th>
+                            <th>Registration Date</th>
+                            <th colspan="5" class="text-center">Actions</th>
+                          </tr>
+                        </thead>
+                      {% for change in changes %}
+                      <tr id="change-{{change.id}}">
+                          <td class="userName" name="change_id">{{change.Orign_clg_id}}</td>
+                          <td class="userAddress" name="change_clg_name">{{change.clg_name}}</td>
+                          <td class="userAge" name="rdate">{{change.rdate}}</td>
+                          <td align="center">
+                              <button class='btn btn btn-outline-success form-control' onClick="editChange({{change.id}})" data-toggle="modal" data-target="#changeModal">VIEW</button>
+                          </td>
+                          <td align="center">
+                              <button class="btn btn btn-outline-danger form-control" onClick="deleteChange({{change.id}})">DELETE</button>
+                          </td>
+                      </tr>
+                      {% endfor %}
+                        {% else %}
+                          <div class="alert alert-success"> No Change Requests</div>
+                        {% endif %}
+                    </table>
+                    </div>
+                    </div>
+                    </div>
+                    </div>
+          </div>
+          {% endif %}
+  
+  
+      <!------ Create Authorize account----- -->
+      <div class="row">
+        <div class="col-lg-12 col-xs-12 col-md-12">
+            <div id = "regAdmForm" class="row mt-3 ml-5" style="display: none;">
+          <form id="newAdmin" class="mt-2 mb-2  bg-light p-5" style="border-radius: 8px;">
+            <div class="card-header m-0 pl-0 pr-0">
+              <h3 class="mb-0">Create Authorize account</h3>
+          </div>
+            <div class="row mt-5 ">
+              <div class="col-3 text-right">
+                <label>First name:</label>
+              </div>
+              <div class="col-3 p-0 m-0">
+                <input type="text" class="form-control" id="Af_name"  name="Af_name" required >
+              </div>
+              <div class="col-3 text-right">
+                <label>Last name:</label>
+              </div>
+              <div class="col-3 p-0 m-0">
+              <input type="text" class="form-control" id="Al_name"  name="Al_name" required>
+              </div>
+            </div>
+            <div class="row mt-4">
+              <div class="col-3 text-right">
+                <label>Email address:</label>
+              </div>
+              <div class="col-3 p-0 m-0">
+                <input type="email" class="form-control" id="Ae_mail" name="Ae_mail" required>
+                <div class="alert alert-danger mt-1" id = "Aemailmsg" role="alert" style="display: none;">
+                  Email address is already in use
+                </div>
+              </div>
+              <div class="col-3 text-right">
+                <label>Phone number:<br>xxx-xxx-xxxx</label>
+              </div>
+              <div class="col-3 p-0 m-0">
+              <input type="number" class="form-control" id = "Aphone" pattern="[0-9]{10}" name="Aphone" required>
+              <div class="alert alert-danger mt-1" id = "Aph_error" role="alert" style="display: none;">
+                Phone number is already in use
+              </div>
+              </div>
+              
+            </div>
+            <div class="row mt-4">
+              <div class="col-3 text-right">
+                <label>Institute Code:</label>
+              </div>
+              <div class="col-3 p-0 m-0">
+                <input type="number" class="form-control instu_code" id="form-source" name="instu_code" required>
+              </div>
+            </div>
+            <div class="modal-footer mt-2">
+              <div class="lodingGIF" style="display: none;">
+                  <span class="form-text text-muted">Please wait...</span>
+                  <img src="{{ MEDIA_URL }}/ajax-loader.gif" alt="loading" width="150px">
+              </div>
+              <button type="submit" class="btn btn-primary">Create</button>
+              <button type="reset" class="btn btn-danger" data-dismiss="modal">Reset</button>
+          </div>
+            </form>
+            </div>
+        </div>
+      </div>    
+      
+        </div>
+    </div>
+        </div>
+  
+        <!-----------View modal---------------->
+        <div class="row">
+          <div class="col-md-12 col-lg-12 col-xs-12">
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+          <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                <h4 class="modal-title " id="myModalLabel"></h4>
+              </div>
+                  <div class="card card-outline-secondary">
+                    <div class="card-header">
+                      
+                        <h3 class="mb-0">User Information</h3>
+                     <span>User Id :<span id = "userID" style="font-weight: bold;" > </span></span><br>
+                    <span>Registration Date:<span id = "Registration_date"style="font-weight: bold;"></span></span><br>
+                     <span>Last login : <span id = "last_log"style="font-weight: bold;" > </span></span>
+                    </div>
+                    <div class="card-body" id="userView">
+                            <div class="form-group row">
+                                <label class="col-lg-3 col-form-label form-control-label">First name:</label>
+                                <div class="col-lg-9">
+                                    <input id = "cvb" class="form-control first_name" type="text" value="" required>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-lg-3 col-form-label form-control-label">Last name:</label>
+                                <div class="col-lg-9">
+                                    <input class="form-control last_name" type="text" placeholder="None"  required>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-lg-3 col-form-label form-control-label">Email:</label>
+                                <div class="col-lg-9">
+                                    <input class="form-control email" type="email" placeholder="None" required>
+                                </div>
+                            </div>
+                              <div class="form-group row">
+                                <label class="col-lg-3 col-form-label form-control-label">Phone number:</label>
+                                <div class="col-lg-9">
+                                    <input class="form-control phone_number" type="number" placeholder="None">
+                                </div>
+                            </div>
+                            <div class="modal-footer mt-2">
+                              <!-- <button type="submit" class="btn btn-primary">Save changes</button> -->
+                              <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                          </div>
+                            </div>
+                                     </div>
+              
+            </div>
+          </div>
+        </div>
+      </div>
+        </div>
+        <!----------------------------Auth Modal--------------------->
+        <div class="modal fade" id="AuthModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+          <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                <h4 class="modal-title " id="myModalLabel">Authorize college information</h4>
+              </div>
+                  <div class="card card-outline-secondary">
+                    <div class="card-header">
+                     <span>User Id :<span id = "userIDa" style="font-weight: bold;" > </span></span><br>
+                     <span style="float: right;">Registration Date:<span id = "Registration_datea"style="font-weight: bold;"></span></span><br>
+                     <span>Institute Code :<span id = "instuCode" style="font-weight: bold;" > </span></span><span style="float: right;">Last login : <span id = "last_loga"style="font-weight: bold;" > </span></span>
+                    </div>
+                    <div class="card-body" id="AuthViewF">
+                            <div class="form-group row">
+                              <label class="col-lg-3 col-form-label form-control-label">College name:</label>
+                              <div class="col-lg-9">
+                                  <input id = "cvb" class="form-control clg_nm" type="text" value="" required>
+                              </div>
+                          </div>
+                          <div class="form-group row">
+                            <label class="col-lg-3 col-form-label form-control-label">University name:</label>
+                            <div class="col-lg-9">
+                                <input id = "cvb" class="form-control uni_nm" type="text" value="" required>
+                            </div>
+                        </div>
+                            <div class="form-group row">
+                                <label class="col-lg-3 col-form-label form-control-label">District:</label>
+                                <div class="col-lg-9">
+                                    <input id = "cvb" class="form-control distM" type="text" value="" required>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-lg-3 col-form-label form-control-label">College address:</label>
+                                <div class="col-lg-9">
+                                <textarea rows='2' class="form-control clg_adds"></textarea>
+                              </div>
+                            </div>
+                            <div class="card-header mb-1">
+                              <h4>Account handler information</h4>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-lg-3 col-form-label form-control-label">Name:</label>
+                                <div class="col-lg-9">
+                                    <input class="form-control Anm" type="text" placeholder="None" required>
+                                </div>
+                            </div>
+                              <div class="form-group row">
+                                <label class="col-lg-3 col-form-label form-control-label">Phone number:</label>
+                                <div class="col-lg-9">
+                                    <input class="form-control apn" type="number" placeholder="None">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                              <label class="col-lg-3 col-form-label form-control-label">Email address:</label>
+                              <div class="col-lg-9">
+                                  <input class="form-control Eadds" type="text" placeholder="None">
+                              </div>
+                          </div>
+                            <div class="modal-footer mt-2">
+                              <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                          </div>
+                      </div>
+                    </div>
+              
+            </div>
+          </div>
+        </div>
+        <!-----------------------Change requests Modal----------->
+        <div class="modal fade" id="changeModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+          <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                <h4 class="modal-title " id="myModalLabel">Request for update</h4>
+                <span>Request date:<span id = "Registration_dateT" class="font-weight-bold"></span></span>
+              </div>
+              <div class="modal-body">
+                <form id="changeForm">
+                <div class = "row">
+                  <div class = "col-6">
+                      <h4 class = "text-center">Current Information</h4>
+                      <div class="form-group">
+                            <label for="clg_id" class="col-sm-6 control-label">Institute code:</label>
+                            <div class="col-12 alert alert-success clg_idO">  
+                                
+                            </div>
+                            <span class="temp_index" hidden></span>
+                        </div>
+                          <div class="form-group">
+                              <label for="clg_nm" class="col-sm-9 control-label">College name:</label>
+                              <div class="col-12 alert alert-success clg_nameO ">
+                                  
+                              </div>    
+                        </div>
+                          <div class="form-group ">
+                              <label for="clg_nm" class="col-sm-9 control-label ">District:</label>
+                              <div class="col-12 alert alert-success DistrictO">
+                                  
+                              </div>    
+                        </div>
+                          <div class="form-group">
+                              <label for="clg_nm" class="col-sm-9 control-label">University:</label>
+                              <div class="col-12 alert alert-success UniversityO">
+                                  
+                              </div>    
+                        </div>
+                           <div class="form-group">
+                              <label for="clg_nm" class="col-sm-9 control-label ">Contact details:</label>
+                              <div class="col-12 alert alert-success contact_detailsO">
+                                  
+                              </div>    
+                        </div>
+                    </div>
+                      <div class = "col-6">
+                      <h4 class = "text-center">Requested Information</h4>
+                        <div class="form-group">
+                            <label for="clg_id" class="col-sm-6 control-label">Institute code:</label>
+                            <div class="col-12 alert alert-success clg_idT">  
+                                
+                            </div>
+                        </div>
+                          <div class="form-group">
+                              <label for="clg_nm" class="col-sm-9 control-label">College name:</label>
+                              <div class="col-12 alert alert-success clg_nameT">
+                                  
+                              </div>    
+                        </div>
+                          <div class="form-group">
+                              <label for="clg_nm" class="col-sm-9 control-label">District:</label>
+                              <div class="col-12 alert alert-success DistrictT">
+                                  
+                              </div>    
+                        </div>
+                          <div class="form-group">
+                              <label for="clg_nm" class="col-sm-9 control-label">University:</label>
+                              <div class="col-12 alert alert-success UniversityT">
+                                  
+                              </div>    
+                        </div>
+                           <div class="form-group">
+                              <label for="clg_nm" class="col-sm-9 control-label">Contact details:</label>
+                              <div class="col-12 alert alert-success contact_detailsT">
+                                  
+                              </div>    
+                        </div>
+                        <div class="form-group row" id = "controls">
+                          <div class="col-lg-5"></div>
+                          <div class="col-lg-7">
+                              <input type="button" class="btn btn-secondary" data-dismiss="modal" value="Close">
+                              <input type="submit" class="btn btn-primary" value="Update Information">
+                          </div>
+                      </div>
+                      </div>
+              </div>
+            </form>
+          </div>
+      
+          </div>
+        </div>
+      </div>
+    </div> 
+        <script>
+          {% if request.user.is_superuser %}
+          $('#orders').show();
+          {% else %}
+          $('#profileTab').show();
+          $('#profile').addClass('active')
+          {% endif %}
+          function deleteChange(id){
+            var action = confirm("Are you sure you want to delete this Entry");
+            if (action != false) {
+              $.ajax({
+                url: '{% url "ajax_view_delete" %}',
+                data:{
+                  'Change_req':true,
+                  'id' : id
+                },
+                dataType : 'json',
+                success: function(data){
+                  if(data.deleted){
+                    $("#chngTable #change-" + data.id).remove();
+                  }
+                }
+              });
+            }
+          }
+      $('form#changeForm').submit(function(){
+            var temp_index = $('.temp_index').text();
+            $.ajax({
+              url: '{% url "clg_infoUpdate" %}',
+              data: {
+                'temp_index' : temp_index
+              },
+              dataType:'json',
+              success: function(data){
+                if(data.already){
+                  alert("Institute code is already assigned to some another college, please check the data");
+                }
+                else{
+                  $("#chngTable #change-" + data.id).remove();
+                  alert("Information is updated successfully");
+                }  
+              }
+            })
+      });
+      function editChange(id){
+        if(id){
+           $.ajax({
+            url: '{% url "Auth_ajax_view" %}',
+             data: {
+                  'changeRequest' : true,
+                  'id' : id
+             },
+             dataType:'json',
+             success: function(data){
+               if(data){
+                appendToChangeModal(data);
+               }
+             }
+           });
+          //  return false;
+         }
+       }
+      
+  function appendToChangeModal(data){
+          $(".temp_index").text(data.temp_index);
+          $(".clg_idO").text(data.origin.clg_id);
+             $(".clg_nameO").text(data.origin.clg_name);
+             $(".DistrictO").text(data.origin.District);
+             $(".UniversityO").text(data.origin.University);
+             $(".contact_detailsO").text(data.origin.contact_details);
+             $(".clg_idT").text(data.tempObj.clg_id);
+             $(".clg_nameT").text(data.tempObj.clg_name);
+             $(".DistrictT").text(data.tempObj.District);
+             $(".UniversityT").text(data.tempObj.University);
+             $("#Registration_dateT").text(data.tempObj.rdate);
+             $(".contact_detailsT").text(data.tempObj.contact_details);
+             $('#userView input').attr('readonly', 'readonly');
+          };
+      $("#formProfile :input").prop("disabled", true);
+          
+        $(function() {
+          $('#profile').click(function(){
+            $('#manageTab').removeClass('active');
+            $('#ordersTab').removeClass('active');
+            $('#change_link').removeClass('active');
+            $('#xlTab').removeClass('active');
+            $('#regMenus').hide();
+            $('#cour_reg').hide();
+            $('#regAdmForm').hide();
+            $('#orders').hide();
+            $('#profileTab').show();
+          });
+          $('#change_link').click(function(){
+            $('#cour_reg').hide();
+            $('#regAdmForm').hide();
+            $('#orders').hide();
+            $('#profileTab').hide();
+            $('#changeTable').show();
+            $('#c_reg').removeClass('active');
+            $('#regAdmForm').hide();   
+            $('#ad_reg').removeClass('active');                
+          });
+          $('#ordersTab').click(function() {
+            $('#profile').removeClass('active');
+            $('#manageTab').removeClass('active');
+            $('#cour_reg').removeClass('active');
+            $('#regMenus').hide();
+            $('#profileTab').hide();
+            $('#orders').show();
+            $('#cour_reg').hide();
+            $('#changeTable').hide();
+            $('#regAdmForm').hide();
+            $('#xlTab').removeClass('active');
+          });
+       $('#manageTab').click(function() {
+        $('#xlTab').removeClass('active');
+        $('#profile').removeClass('active');
+           $('#ordersTab').removeClass('active');
+           $('#regHead').addClass('active');
+            $('#c_reg').addClass('active');
+            $('#cour_reg').show();
+            $('#regMenus').show();
+            $('#orders').hide();
+            $('#profileTab').hide();
+            $('#ad_reg').removeClass('active');
+            $('#changeTable').hide();
+          });
+          $('#c_reg').click(function() {
+            $('#change_link').removeClass('active');
+            $('#cour_reg').show();
+            $('#ad_reg').removeClass('active');
+            $('#regAdmForm').hide();
+            $('#changeTable').hide();
+            });
+        $('#ad_reg').click(function() {
+          $('#changeTable').hide();
+          $('#change_link').removeClass('active');
+          $('#cour_reg').hide();
+          $('#c_reg').removeClass('active');
+          $('#regAdmForm').show();
+        });
+        });
+        function editUser(id){
+          // alert("ajax_view");
+         if(id){
+           $.ajax({
+             url: '{% url "ajax_view" %}',
+             data:{
+                  'id' : id
+             },
+             dataType:'json',
+             success: function(data){
+               if(data){
+                 
+                 appendToViewModal(data);
+                //  alert(string);
+                //  appendInfo(data.info);
+               }
+             }
+           });
+          //  return false;
+         }
+       }
+       function AutheditUser(id){
+        // alert("Auth_ajax_view");
+         if(id){
+           $.ajax({
+             url: '{% url "Auth_ajax_view" %}',
+             data:{
+                  'id' : id
+             },
+             dataType:'json',
+             success: function(data){
+               if(data){
+                appendToAuthViewModal(data);
+               }
+             }
+           });
+          //  return false;
+         }
+       }
+       function AuthdeleteUser(id){
+            var action = confirm("Are you sure you want to delete this Account");
+            if (action != false) {
+              $.ajax({
+                url: '{% url "Auth_ajax_view_delete" %}',
+                data:{
+                  'id' : id
+                },
+                dataType : 'json',
+                success: function(data){
+                  if(data.deleted){
+                    $("#AuthTable #clg-" + id).remove();
+                  }
+                }
+              });
+            }
+          }
+    
+  
+          function appendToAuthViewModal(data){
+          console.log(data.AC);
+          $(".Anm").val(data.AC[11]+" "+data.AC[13]);
+            $(".clg_nm").val(data.AC[1]);
+             $(".uni_nm").val(data.AC[3]);
+             $(".distM").val(data.AC[2]);
+             $(".apn").val(data.AC[8]);
+             $(".Eadds").val(data.AC[6]);
+             $(".clg_adds").text(data.AC[4]);
+             $("#userIDa").text(data.AC[5]);
+             $("#Registration_datea").text(data.AC[17]);
+             $("#last_loga").text(data.AC[10]);
+             $("#instuCode").text(data.AC[0]);
+            //  $('#userView').removeAttr('required');
+             $('#AuthViewF input').attr('readonly', 'readonly');
+             $('#AuthViewF textarea').attr('readonly', 'readonly');
+          };
+        function appendToViewModal(data){
+          $(".first_name").val(data.info.username);
+             $(".last_name").val(data.info.last_name);
+             $(".email").val(data.info.email);
+             $(".phone_number").val(data.info.Phone_no);
+             $("#userID").text(data.info.id);
+             $("#Registration_date").text(data.info.Rdate);
+             $("#last_log").text(data.info.last_login);
+            //  $('#userView').removeAttr('required');
+             $('#userView input').attr('readonly', 'readonly');
+          };
+  function deleteUser(id){
+            var action = confirm("Are you sure you want to delete this Entry");
+            if (action != false) {
+              $.ajax({
+                url: '{% url "ajax_view_delete" %}',
+                data:{
+                  'id' : id
+                },
+                dataType : 'json',
+                success: function(data){
+                  if(data.deleted){
+                    $("#RegTable #user-" + id).remove();
+                  }
+                }
+              });
+            }
+          }
+      
+          $('#edit').click(function(){
+                          $("#formProfile :input").prop("disabled", false);
+                          $("#controls").show();
+                        });
+          $('input[type = "reset"]').click(function(){
+                          $("#formProfile").trigger("reset");
+                          $("#controls").hide();
+                          $("#formProfile :input").prop("disabled", true);
+                      });
+          $("form#formProfile").submit(function(){
+                      var f = $('.first_name').val().trim();
+                      var l = $('.last_name').val().trim();
+                      var e = $('.email').val().trim();
+                      var p = $('.phone_number').val().trim();
+                  if(1){
+                      // alert("000");
+                      $.ajax({
+                          url: '{% url "crud_profile_update" %}',
+                          data: {
+                              'f': f,
+                              'e': e,
+                              'p': p,
+                              //'g' : gender,
+                              //'d':d,
+                              'l':l,
+                              // 'pcode':pcode,
+                              // 'address': address,
+                              'userType' : "admin"
+                          },
+                          dataType: 'json',
+                          success: function (data) {
+                              if (data.noError) {
+                              alert("Information updated");
+                              location.reload()
+                              $("#formProfile :input").prop("disabled", true);
+                              $("#controls").hide();
+                              }
+                              else if(data.Eerror){
+                                alert("Email ID "+data.erMail+" is already registered");
+                              }
+                              else{
+                                alert("Phone number "+data.erPhone+" is already registered");
+                              }
+                          }
+                          
+                      });
+                      return false;
+                  } else {
+                      alert("All fields must have a valid value.");
+                      return false;
+                      }
+                      return false;
+                  });
+                    
+  
+                  $("form#newAdmin").submit(function(){
+                    $(".lodingGIF").show();
+              var fn = $('input[name="Af_name"]').val().trim();
+              var ln = $('input[name="Al_name"]').val().trim();
+              var em = $('input[name="Ae_mail"]').val().trim();
+              var ap = $('input[name="Aphone"]').val().trim();
+              var pwd = $('input[name="instu_code"]').val().trim();
+              $.ajax({
+                url:'{% url "ajax_newAdmin" %}',
+                data:{
+                  'fn' : fn,
+                  'ln' : ln,
+                  'em' : em,
+                  'ap' : ap,
+                  'pwd' : pwd
+                },
+                dataType:'json',
+                success: function(data){
+                    if(data.registered){
+                      $(".lodingGIF").hide();
+                      alert("New Staff account created successfuly");
+                      location.reload(true);
+                    }
+                    else if(data.em_error && data.ph_error){
+                      $('#Aemailmsg').show();
+                      $('#Aph_error').show();
+                    }
+                    else if(data.em_error){
+                      $('#Aemailmsg').show();
+                    }
+                    else{
+                      $('#Aph_error').show();
+                    }
+                  }
+              });
+              return false;
+            });
+      </script>
+        {% endblock %}
+    </div>
+  </div>
+</body>
+  </html>    

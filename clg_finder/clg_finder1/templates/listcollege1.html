@@ -1,0 +1,145 @@
+<html>
+<head>
+  <title> 
+    College suggestor 
+</title> 
+  
+<link rel = "icon" href =  "static\logo.jpg" type = "image/x-icon"> 
+  <script src='https://kit.fontawesome.com/a076d05399.js'></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<style>
+body{
+  background-image: url('https://images.pexels.com/photos/1438072/pexels-photo-1438072.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940');
+  background-repeat: no-repeat;
+  background-attachment: fixed;  
+  background-size: cover;
+}
+* {
+  box-sizing: border-box;
+}
+#white{
+    color: white;
+}
+#myInput {
+  background-image: url('/css/searchicon.png');
+  background-position: 10px 10px;
+  background-repeat: no-repeat;
+  width: 100%;
+  font-size: 16px;
+  padding: 12px 20px 12px 40px;
+  border: 1px solid #ddd;
+  margin-bottom: 12px;
+}
+#myTable {
+  border-collapse: collapse;
+  width: 100%;
+  border: 1px solid #ddd;
+  font-size: 18px;
+  /* color: white; */
+}
+
+#myTable th, #myTable td {
+  text-align: left;
+  padding: 12px;
+}
+.btn{
+  background-color: #FF7708;
+  color: white;
+}
+
+#myTable tr {
+  border-bottom: 1px solid #ddd;
+}
+
+#myTable tr.header {
+  background-color:white;
+  opacity: 0.9;
+}
+#white:hover{
+    background-color:black;
+    opacity: 0.8;
+}
+
+nav{
+    background-color: brown;
+      }
+#jumbo {
+	-webkit-box-shadow: 31px 16px 15px -4px rgba(0,0,0,0.83);
+-moz-box-shadow: 31px 16px 15px -4px rgba(0,0,0,0.83);
+box-shadow: 31px 16px 15px -4px rgba(0,0,0,0.83);
+    background: rgba(0,0,0, 0.7); 
+}
+
+</style>
+</head>
+{% extends "a.html" %}
+{% block content %}
+<body>
+  <br><!-- ----------------------------Search bar-------------------------------------- -->
+
+<div class="container">
+  <form method="POST" action="/users/detailpage/">
+    {% csrf_token %}
+<div class="jumbotron" id="jumbo">
+	<input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search by names.." title="Type in a name">
+<br>
+<br>
+<table id="myTable">
+  <tr class="header">
+    {% if not final_result %}
+  <th><h1 style="text-align: center;">No result Under this Criteria</h1></th>
+  </tr>
+  {% else %}
+    <th style="width:20%;">Institute Code</th>
+	<th style="width:40%;">College Name</th>
+	<th style="width:40%;">Region</th>
+	<th style="width:40%;">Department</th>
+	<th style="width:40%;">Action</th>
+  {% for a,b,c,d in final_result %}
+  <tr id="white">
+   <td style="text-align: center;">{{ a }}</td>
+    <td>{{ c }}</td>
+	<td>{{ b }}</td>
+	<td>{{ d }}</td>
+	<td><button type="submit" id = "btn" class="btn btn-info">view</a></td>
+  {% endfor %}  </tr>
+  <input type="text" id = "code" name = "instu_code" value ="abc" hidden>
+</table>
+{% endif %}
+</div>
+<script>
+  
+  $('#myTable').find('tr').click( function(){
+  var row = $(this).find('td:first').text();
+  document.getElementById("code").value = row;
+  //alert('You clicked ' + row);
+});
+function myFunction() {
+  var input, filter, table, tr, td, i, txtValue;
+  input = document.getElementById("myInput");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("myTable");
+  tr = table.getElementsByTagName("tr");
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[1];
+    if (td) {
+      txtValue = td.textContent || td.innerText;
+      if (txtValue.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    }       
+  }
+}
+</script>
+
+</form>
+</div>
+</body>
+{% endblock %}
+</html>

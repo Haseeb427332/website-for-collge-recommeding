@@ -1,0 +1,52 @@
+
+    {% extends 'a.html' %}
+{% block title %}OTP{% endblock %}
+{% block content %}
+<div class="card card-outline-secondary mt-5 ml-auto mr-auto w-50">
+    <div class="card-header">
+        <h2 class="mb-0">Enter OTP</h2>
+    </div>
+    <div class="card-body">
+        <form method="GET" action="/users/user_data1">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="inputPasswordOld">Enter OTP :</label>
+                <input type="text" class = "form-control" id="first_name" name="first_name" required placeholder=" " />
+              <span class="form-text small text-danger mt-2">
+                {{ form.email.errors }}
+              </span>
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-success btn-lg float-right">Submit</button>
+            </div>
+            <input type="text" id="first_name" name="f" value="{{ f }}"  hidden/>
+      <input type="text" id="first_name" name="l" value = "{{ l }}" hidden />
+      <input type="text" id="first_name" name="e" value = "{{ e }}" hidden />
+      <input type="text" id="first_name" name="p" value="{{ p }}" hidden />
+      <input type="text" id="first_name" name="Ph" value="{{ Ph }}" hidden />
+
+</form>
+</div>
+<script>
+    function validatePassword() {
+    var pass1 = "{{ o }}";
+    if(pass1 != (document.getElementById("first_name").value))
+    {
+        document.getElementById("first_name").setCustomValidity("Wrong OTP");
+    }
+    else{
+        alert("registration Successfull");
+    }
+    }
+document.getElementsByName("submito")[0].onclick = validatePassword;
+</script>
+</div>      
+{% endblock content %}
+{% block javascript %}
+<!-- <script>
+    $("form#Reset").submit(function() {
+        alert("Password reset link is sent to you email id. Please check the emails");
+    }
+    );
+</script> -->
+{% endblock javascript%}

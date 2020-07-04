@@ -1,0 +1,302 @@
+
+
+<html>
+  
+<head>
+  <title> 
+    College suggestor 
+</title> 
+  
+<link rel = "icon" href =  "static\logo.jpg" type = "image/x-icon"> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- css files -->
+<style>
+body{
+  background-image: url('https://images.pexels.com/photos/1438072/pexels-photo-1438072.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940');
+  background-repeat: no-repeat;
+  background-attachment: fixed;  
+  background-size: cover;
+  /* font-family: 'Open Sans', sans-serif; */
+  font-family:'Times New Roman', Times, serif ;
+}
+input[type=number] {
+  
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+div
+{
+  /* font-family: 'Open Sans', sans-serif; */
+ /* font-family:Times New Roman; */
+ font-size:100%
+  }
+.container{
+  width:100%;
+}
+  #jumbo {
+	-webkit-box-shadow: 31px 16px 15px -4px rgba(0,0,0,0.83);
+-moz-box-shadow: 31px 16px 15px -4px rgba(0,0,0,0.83);
+box-shadow: 31px 16px 15px -4px rgba(0,0,0,0.83);
+    background: rgba(0,0,0, 0.9); 
+    color:aqua;
+  font-family: inherit;
+  width: 100%;
+}
+input[type="radio"] {
+    -ms-transform: scale(1.5); /* IE 9 */
+    -webkit-transform: scale(1.5); /* Chrome, Safari, Opera */
+    transform: scale(1.5);
+    color:red
+}
+.form-inline {
+   width:100%;
+}/* select{
+  -webkit-box-shadow: 31px 16px 15px -4px rgba(0,0,0,0.83);
+-moz-box-shadow: 31px 16px 15px -4px rgba(0,0,0,0.83);
+box-shadow: 31px 16px 15px -4px rgba(0,0,0,0.83);
+} */
+input[type="range"]{
+  -webkit-box-shadow: inset 24px 30px 19px -6px rgba(0,0,0,0.52);
+-moz-box-shadow: inset 24px 30px 19px -6px rgba(0,0,0,0.52);
+/* box-shadow: inset 24px 30px 19px -6px rgba(0,0,0,0.52); */
+
+}
+.btn{
+  background-color: #FF7708;
+  color: white;
+}
+/* .myHeader{
+
+    top: 0;
+  width: 100%;
+  z-index:1000;
+} */
+#Caste {
+  text-transform: uppercase;
+          }       
+</style>
+
+
+</head>
+
+<!-- ----------------------------Search bar-------------------------------------- -->
+{% extends 'a.html' %}
+{% block content %}
+<body>
+<div class="row">
+  <div class="col-lg-12 col-xs-12 col-md-12">
+    <div class="container">
+      <div class="jumbotron" id="jumbo">
+        <form method="post" action="/" id ="filterForm">
+          {% csrf_token %} 
+        <div class="input-group mb-3">
+            <span class="input-group-text" id = "a">Marks</span>
+        <input type="number" id="PCM" name = "PCM_marks" placeholder="Enter PCM Marks" class=" form-control col-xs-4" oninput="this.setCustomValidity('')">  &nbsp
+        <input type="number" name = "cet" id = "CET_marks" placeholder="Enter MH-CET Marks"  class=" form-control col-xs-4" >&nbsp &nbsp
+        <span class="input-group-text" id = "a">Caste</span>
+                  <select name="caste" id = "Caste" class=" form-control col-xs-12"  oninput="this.setCustomValidity('')">
+                    <option value="">----SELECT----</option>
+                    {% for preorder in caste %}
+                    <option value="{{ preorder }}">{{ preorder }}</option>
+                    {% endfor %}
+            </select>
+        <br>
+        </div>
+        <br>
+        <center><span id="filter" style="font-family:Times New Roman;font-size:25;color: aliceblue;"> Apply filters</span></center>
+        <br>
+        <!-- <form method="post" action="listcollege.html">-->
+        <center> 
+        <table class="table table-responsive table-borderless"  style="border:none;">
+          <thead>
+            <tr style="color:whitesmoke;font-size:22;">
+              <th><i class="fas fa-map-marker-alt" style="font-size:30px;color:#FF7708"></i> &nbsp <label >District</label> </th>
+              <th><i class='fas fa-user-graduate' style='font-size:30px;color:#FF7708'></i></i>&nbsp <label >Stream</label></th>
+          <th><i class='fas fa-rupee-sign' style='font-size:30px;color:#FF7708'></i></i>&nbsp <label >Fees</label></th>
+          <th><i class="fas fa-university" style='font-size:28px;color:#FF7708'></i> &nbsp <label >University</label> </th>
+          <th><i class="fas fa-restroom" style='font-size:30px;color:#FF7708'></i> <label >Gender</label> </th>
+        </tr>
+          </thead>
+        <tr style=" color:white;font-size:19;">
+        <td>
+        <div class="dropdown">
+         <select name="district" id = "dist" class="form-control"  >
+          <option value="">----SELECT----</option>
+          {% for d in dist %}
+          <option value="{{ d }}">{{ d }}</option>
+          {% endfor %}
+         </select>
+          </div>
+        </td>
+        <td>
+        <div class="dropdown">
+        <select name="Department" id = "dept"  class="form-control" style="width:205px;">
+          <option value="">----SELECT----</option>
+          {% for sl in stream_list %}
+          <option value="{{ sl }}">{{ sl }}</option>
+          {% endfor %}	</select>
+        </div>
+        </td>
+        <td><!--fees range bar-------------------------------------- -->
+        <div class="input-group mb-3">
+      <input type="range" name="fees" min="5000" max="500000" value="5000" class="slider" id="myRange">
+      <center>Value: <span id="demo"></span></center>
+          </div>
+        </td>
+        <td>
+          <div class="dropdown">
+      <select name="University" id = "uni" class="form-control" style="width:150;"><option value="" >----SELECT----</option>
+      {% for un in University %}
+      <option value="{{ un }}">{{ un }}</option>
+      {% endfor %}
+      </select>
+          </div>
+        </td>
+        <td>
+          <div class="input-group mb-3 form-check form-check-inline">
+          <fieldset data-role="controlgroup" >
+              <label for="male" class="group-text ">Male</label>
+              <input type="radio" name="gender" id="male" value="male">&nbsp &nbsp
+              <label for="female"  class="group-text" >Female</label>
+              <input type="radio" name="gender" id="female" value="female" > 
+            </fieldset>
+          </div>
+        </td>
+        </tr >
+        </table>
+        </center>
+        <br>
+        <br>
+        <center>
+        <input type="submit" id ="submit" name = "submito" class="btn" style="background-color: #FF7708;color:white"> &nbsp  &nbsp
+        <input type="reset" class="btn btn-danger" value="Cancel"></center>
+        {% if messages %}
+        {% for m in messages %}
+        <div class="alert alert-success w-50 ml-auto mr-auto mt-2 text-center">{{ m }}</div>
+        {% endfor %}
+        {% endif %}
+        </div>
+        
+        </div>
+        <br>
+        <!-- footer -------->
+      <div class="row">
+        <div class="col-lg-12 col-xs-12,col-md-12">
+      <div class="container" id="jumbo">
+      <footer class="page-footer font-small blue">
+        <!-- Copyright -->
+        <div class="footer-copyright text-center py-3">© 2020 Copyright:
+          <a href="/templates/myteam.html">BE project</a>
+        </div>
+        <!-- Copyright -->
+      </footer>
+      </div>
+    </div>
+      </div>
+  </div>
+</div>
+
+<script>
+  
+  var slider = document.getElementById("myRange");
+  var output = document.getElementById("demo");
+  output.innerHTML = slider.value;
+  slider.oninput = function() {
+    output.innerHTML = this.value;
+  }  
+  // $("form#filterForm").submit(function (e) {
+  //     e.preventDefault();
+  //     var self = this;
+  //     $.ajax({
+  //       url: '/validate_username/',
+  //       dataType: 'json',
+  //   }).done(function(data){
+  //     if(data.is_taken != ''){
+  //       alert('something');
+  //       self.submit();
+  //       return true;
+  //     }
+  //     else{
+  //       alert('Please login first');
+  //     }
+  //   });
+  //   });
+  function validation(){
+   
+    if(document.getElementById("CET_marks").value == '' &&
+     document.getElementById("Caste").value == '' && 
+     document.getElementsByName("gender")[0].checked == false && 
+     document.getElementsByName("gender")[1].checked == false && 
+     document.getElementById("PCM").value == '' && 
+     document.getElementById("dist").value == '' &&
+     document.getElementById("dept").value == '' &&
+     document.getElementById("uni").value == '' &&
+     document.getElementsByName("fees")[0].value == '5000'){
+        alert("You have not chosen any filters ");
+        return false;
+    }
+    if((document.getElementById("CET_marks").value == '' &&
+     document.getElementById("Caste").value == '' && 
+     document.getElementById("PCM").value == '' && 
+     document.getElementById("dist").value == '' &&
+     document.getElementById("dept").value == '' &&
+     document.getElementById("uni").value == '' &&
+     document.getElementsByName("fees")[0].value == '5000') && (
+     document.getElementsByName("gender")[0].checked == true || 
+     document.getElementsByName("gender")[1].checked == true )){
+        alert("Selected option is not enough to generate result");
+        return false;
+    }
+    //alert("helo")
+    if(document.getElementById("CET_marks").value != '' || document.getElementById("Caste").value != ''){
+      if(document.getElementById("myRange").value != '5000'){
+      //alert("hello");
+      document.getElementById("Caste").required = true;
+    }
+    else{
+      //alert("helo")
+      document.getElementById("Caste").required = true;
+      document.getElementsByName("gender")[1].required = true;
+      document.getElementById("CET_marks").required = true;
+    }
+    }
+    if(document.getElementById("myRange").value != '5000'){
+      //alert("hello");
+      document.getElementById("Caste").required = true;
+    }
+    if(document.getElementById("PCM").value != ''){
+        if(document.getElementById("Caste").value == '')
+        {
+          
+          document.getElementById("Caste").required = true;
+        }
+        else{
+         // alert("hiii");
+          if(document.getElementById("PCM").value < 135 && document.getElementById("Caste").value != 'open'){
+            document.getElementById("PCM").setCustomValidity("For Backword class Categories PCM Cut-off is 135 and above ");
+            //return false; 
+            }
+          
+          if(document.getElementById("PCM").value < 150  && document.getElementById("Caste").value == 'open'){
+            document.getElementById("PCM").setCustomValidity("For OPEN Category PCM Cut-off is 150 and above ");
+            //return false;
+            }
+        }
+    }
+    //return false;
+  }
+  
+  document.getElementById("submit").onclick = validation;
+//  setCustomValidity('');
+</script>	
+</form>
+</body>
+
+</html>
+{% endblock %}

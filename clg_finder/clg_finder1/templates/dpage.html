@@ -1,0 +1,634 @@
+
+<html>
+<head>
+  <title> 
+    College suggestor 
+</title> 
+  
+<link rel = "icon" href =  "static\logo.jpg" type = "image/x-icon"> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
+
+<style>
+  .img-wrap {
+    margin-top: 10px;
+    display: inline-block;
+    font-size: 0;
+    width:auto;
+}
+.img-wrap .close {
+  float: right;
+  width: 26px;
+  height: 26px;
+  background: transparent url(https://tympanus.net/Tutorials/CSSOverlay/images/cancel.png) repeat top left;
+  margin-top: -12px; /* 25px (padding top) + [26px (icon height) / 2] = 38px (minus) */
+  margin-left: -12px; /* 25px (paddi*/
+  cursor: pointer;
+}
+.close:hover {
+    opacity: 1;
+}
+  #changeDP {
+  position: relative;
+  overflow: hidden;
+  font-size: 15px;
+  background-color: rgba(9, 9, 14, 0.5);
+  border: #000000;
+  
+}
+#DP {
+  cursor: pointer;
+  position: absolute;
+  font-size: 10px;
+  opacity: 0;
+  right: 0px;
+  top: 0;
+}
+body{
+  background-image: url('http://krisaru.com/wp-content/uploads/2011/11/background-website-light-blue-wallpapers-background2-300x225.jpg');
+  background-attachment: fixed;  
+  background-size: cover;
+  background-position:center;
+  font-family:Times New Roman
+}
+/* div.gallery {
+  margin: 5px;
+  border: 1px solid #ccc;
+  float: left;
+  width: 180px;
+}
+
+div.gallery:hover {
+  border: 1px solid #777;
+}
+
+div.gallery img {
+  width: 100%;
+  height: auto;
+} */
+#jumbo {
+	-webkit-box-shadow: 31px 16px 15px -4px rgba(0,0,0,0.83);
+-moz-box-shadow: 31px 16px 15px -4px rgba(0,0,0,0.83);
+box-shadow: 31px 16px 15px -4px rgba(0,0,0,0.83);
+    background: rgba(255,255,255);
+}
+.the-legend {
+    border-style: none;
+    border-width: 0;
+    font-size: 25px;
+    line-height: 20px;
+    margin-bottom: 0;
+    width: auto;
+    padding: 10 10px;
+    border: 1px solid #e0e0e0;
+}
+.the-fieldset {
+    border: 1px solid cornflowerblue;
+    padding: 10px;
+}
+/* .the-fieldset > input[type = "text"]{
+
+  font-weight: bolder;
+} */
+input[type="text"],input[type="number"],.tab{
+  border: none;
+  background: transparent;
+  border-bottom: 1px  solid #000000;
+  font-size:larger;
+  font-weight: bold;
+}
+label{
+  font-size: 20px;
+  font-style: unset;
+}
+#img {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 5px;
+  width: 108px;
+}
+
+.hidden {
+  display: none;
+}
+
+#img:hover {
+  box-shadow: 0 0 2px 1px rgba(0, 140, 186, 0.5);
+}
+#cont{
+/* background-image: url('https://images.shiksha.com/mediadata/images/1559806095phpdL4ZP5.jpeg'); */
+/* height:300px; */
+width:100%;
+margin-right: auto;
+    margin-left: auto;
+display:flex;
+justify-content:center;
+align-items:center; 
+background-size: cover;
+background-position:center;
+}
+.header_img {
+    width: 200px; 
+    float: none;
+   text-align: center;
+     box-shadow: 0 0 2px 0 rgba(0,0,0,.16), 0 2px 4px 0 rgba(0,0,0,.16); 
+    background: #fff;
+     margin: -179px 49px 28px; 
+     border-radius: 2px; 
+     overflow: hidden; 
+    border: 4px solid #ffffff; 
+      display: flex; 
+    justify-content: center;
+     align-items:center; 
+     -webkit-box-shadow: -8px -7px 5px 0px rgba(0,0,0,0.49);
+-moz-box-shadow: -8px -7px 5px 0px rgba(0,0,0,0.49);
+box-shadow: -8px -7px 5px 0px rgba(0,0,0,0.49);
+ } 
+ .responsive {
+  width: 100%;
+  height: auto;
+}
+.checked {
+  color: orange;
+}
+* {
+  transition: all .2s ease;
+}
+
+.extra-info {
+  display: none;
+  line-height: 30px;
+  font-size: 12px;
+	position: absolute;
+  top: 0;
+  left: 50px;
+}
+
+.info:hover .extra-info {
+  display: block;
+  background-color: black;
+  color:white;
+  border-radius: 20px;
+}
+
+.info {
+  font-size: 20px;
+  padding-left: 5px;
+  width: 20px;
+  border-radius: 15px;
+}
+
+.info:hover {
+  background-color: white;
+  padding: 0 0 0 5px;
+  width: 315px;
+  text-align: left !important;
+}
+</style>
+</head>
+{% extends "a.html" %}
+<!-- ----------------------------Search bar-------------------------------------- -->
+{% block content %}
+<body>
+  <div class="row">
+    <div class="col-lg-12 col-md-12 col-xs-12">
+      <form id = "cover_img" enctype="multipart/form-data"> 
+        {% csrf_token %}
+      <!-- ----------college image ------------>
+      <div  id="cont" class="container">
+        <button  type="button" style="border:none"><label for="files"><img class="responsive" style="border:none"  src="{{ template_img }}" title="Click to update the image of College " ></label></button>
+      </div>
+      {% if is_staff %}
+      <div class="btn btn-lg btn-primary" id="changeDP" style="margin-top: -55px; margin-left: 75%;">
+        Change cover photo
+        <input type="file" class="cover" name="cover" id = "DP"/>
+      </div>
+      {% endif %}
+      <input type="text" name='flag' value="c" hidden>
+      </form>
+      <!-- college image end--------------->
+      <div class="container">
+      <div class="jumbotron" id="jumbo">
+        <!--logo image ---------->
+    <form id = "logo_img" enctype="multipart/form-data"> 
+      {% csrf_token %}
+      <div class="header_img">
+        <input type="file" id="pro_pic" name = "" class="hidden" accept="image/jpeg,image/png">
+        <button  type="button" style="border:none">
+          <label for="files">
+            <img class="responsive"  src="{{ string }}" title="Click to update the logo of College "  style="width:200px;">
+          </label>
+      </button>
+      </div>
+      {% if is_staff %}
+      <div class="btn btn-lg btn-primary" id="changeDP" style="margin-top: -55px; margin-left: 90px;">
+        Change logo
+        <input type="file" class="logo" name="logo" id = "DP"/>
+      </div>
+      {% endif %}
+      <input type="text" name='flag' value="l" hidden>
+    </form>
+      <!--logo image end-->
+      <form id = "details" aria-disabled="true" enctype="multipart/form-data">
+      <!--edit page button-->
+      {% if is_staff %}
+          <input type="button" id="auth_staff" value="Edit Page" class="btn btn-success" style="width: 100px;float:right;margin-top:-50px;">
+          <input id = "upReset" type="reset" class="btn btn-secondary" value="Cancel" style="display: none;width: 100px;float:right;margin-top:-50px">
+          {% else %}
+        {% if fav_checked %}
+      <span class="fa fa-star checked fa-3x" style="float:right;margin-top:-50px;cursor: pointer;"></span>
+        {% else %}
+      <span class="fa fa-star fa-3x" style="float:right;margin-top:-50px ;cursor: pointer;"></span>
+        {% endif %}   
+      {% endif %}
+      
+        {% csrf_token %}
+      <!--form start  -------------------->
+        {% for a,b,c,d,e in detail %}
+        <div class="form-group">
+          <fieldset class="the-fieldset">
+            <input type="number" name="instu_code" value="{{ a }}" style="width: 60px;" hidden>
+              <legend class="the-legend">College Details</legend>
+              <br>
+              <label >Institute Name</label> &nbsp
+              <input type="number" name="instu_codeF" id = "instu_codeF" value="{{ a }}" style="width: 60px;" readonly>&nbsp - <input id = "clg_name" name="clg_name" type="text" value="{{b}}" style="width:75%;"readonly>
+              <br>
+              <br>
+              <label >District</label> &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp
+              <input id="dist" name="dist" type="text" value="{{c}}" style="width:85%;"readonly>
+              <br>
+              <br>
+              <label >University</label> &nbsp &nbsp &nbsp &nbsp &nbsp 
+              <input id="uni" name="uni" type="text" value="{{d}}" style="width:85%;"readonly>
+              <br>
+              <br>
+              <label >Contact Details</label> &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp
+              <input id="contact" name="contact" type="text" value="{{e}}" style="width:85%;"readonly>
+             <br>
+             {% endfor %}
+          </fieldset>
+      </div>
+    <br>
+    <div class="form-group row" id = "controls" style="display: none;">
+      <div class="col-lg-9"></div>
+      <div class="col-lg-3">
+          <input type="reset" class="btn btn-secondary" value="Cancel">
+          <input type="submit" id ="submit" class="btn btn-primary" value="Save Changes">
+      </div>
+    </div>
+      </form>
+    <br>
+    
+    <div class="form-group">
+      <fieldset class="the-fieldset">
+          <legend class="the-legend">Fees</legend>
+          <br>
+          <div class="table-responsive">
+            <table class="table">
+              {% if not fee %}
+              <th><h3 style="text-align: center;">Currently Data is not available</h3></th>
+              {% else %}
+            <thead class="thead-dark">
+              <tr>
+                  <th>OPEN</th> 
+                    <th>OBC</th>
+                    <th>SC</th>
+                    <th>ST</th>
+                    <th>SBC</th>
+                    <th> VJ</th>
+                    <th>NT</th>
+              </tr>
+            </thead>
+            <tbody class="tab">
+              {% for a,b,c,d,e,f,g,h,i in fee %}
+              <tr>
+                <td>{{ c }}</td>
+              <td>{{ d }}</td>
+              <td>{{ e }}</td>
+              <td>{{ f }}</td>
+              <td>{{ g }}</td>
+              <td>{{ h }}</td>
+              <td>{{ i }}</td>
+              
+              </tr>
+              {% endfor %}
+              {% endif %}
+            </tbody>
+          </table>
+          </div>
+      </fieldset>
+    </div>
+    <br>
+    <br>
+    <center><h5 style="color:red;font-style:italic">*Note: The cut-off and fees are recorded from previous year so they may vary with time</h5></center>
+    <div class="form-group">
+      <fieldset class="the-fieldset">
+          <legend class="the-legend">Cutoff
+            <div class="col-md-12">
+              <div class="info">
+                <i class="icon-info-sign"></i>
+          
+               <center> <span class="extra-info">
+                  Here G stands for Gents and L Stands for Ladies following with Caste eg. GOPENS Means Gents-Open
+                </span>
+                </center>
+              </div>
+          </div>
+          </legend>
+          <br> 
+          <div class="table-responsive">
+            <table class="table table-bordered">
+              <thead class="thead-dark">
+                <tr>
+                  <th>COURSES</th>
+                  <th>INTAKE</th>
+                  <th>GOPENS</th>
+                  <th>GSCS</th>
+                  <th>GSTS</th>
+                  <th>GVJS</th>
+                  <th>GNT1S</th>
+                  <th>GNT2S</th>
+                  <th>GNT3S</th>
+                  <th>GOBCS</th>
+                  <th>LOPENS</th>
+                  <th>LSCS</th>
+                  <th>LSTS</th>
+                  <th>LVJS</th>
+                  <th>LNT1S</th>
+                  <th>LNT2S</th>
+                  <th>LNT3S</th>
+                  <th>LOBCS</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t in cut_off %}
+                <tr>
+                  <th>{{ c }}</th>
+                  <th>{{ d }}</th>
+                  <th>{{ e }}</th>
+                  <th>{{ f }}</th>
+                  <th>{{ g }}</th>
+                  <th>{{ h }}</th>
+                  <th>{{ i }}</th>
+                  <th>{{ j }}</th>
+                  <th>{{ k }}</th>
+                  <th>{{ l }}</th>
+                  <th>{{ m }}</th>
+                  <th>{{ n }}</th>
+                  <th>{{ o }}</th>
+                  <th>{{ p }}</th>
+                  <th>{{ q }}</th>
+                  <th>{{ r }}</th>
+                  <th>{{ s }}</th>
+                  <th>{{ t }}</th>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+      </fieldset>
+    </div>
+      <br>
+      <form id = "id_ajax_upload_form" aria-disabled="true" enctype="multipart/form-data">
+        {% csrf_token %}
+      <div class="form-group" style="display: grid;">
+        {% if is_staff %}
+        <div class="alert alert-success w-50 m-auto">You can have upto 20 images in your gallary.</br>you can select multiple images to upload.</div>
+        <div id = "Gallery_msg" class="alert w-50 m-auto" style="display: none;">
+          Photo gallery is full.</br>
+          First <strong id = 'uploadCount'></strong> photos are successfully uploaded 
+      </div>
+        {% endif %}    
+        <fieldset class="the-fieldset" id="galQuery">
+          {% if is_staff %}
+          <div class="btn btn-lg btn-primary" id="changeDP" style="margin-top: -50px; margin-left: 85%;display:block;">
+            Upload images
+            <input type="file" class="multi" name="multi" id = "DP" multiple/>
+          </div>
+          {% endif %}
+            <legend class="the-legend">Photo Gallery</legend>
+            <br> 
+            <!---------------photo gallery ------------------------>
+            {% if gallary %}
+              {% for img in gallary %}
+                <div class="img-wrap">
+                  {% if is_staff %}
+                  <span class="close"></span>
+                  {% endif %}
+                  <a target="_blank" href="{{Gstring}}{{ img }}">
+                    <img src="{{Gstring}}{{ img }}" class = 'imgvalue' alt="image" width="300" height="250">
+                  </a>
+                </div>
+                {% endfor %}
+            {% endif %}
+            </fieldset> 
+      </div>
+      <br>
+      <input type="text" name='flag' value="g" hidden>
+    </form>
+    </div>
+    </div>
+    </div>
+  </div>
+ </body>
+ <script>
+    window.onload = function(){   
+    //Check File API support
+    if(window.File && window.FileList && window.FileReader)
+    {
+        //alert("hello");
+        $('.multi,.logo,.cover').on("change", function(event) {
+          //alert("hello");
+            var files = event.target.files; //FileList object
+            var output = document.getElementById("galQuery");
+            for(var i = 0; i< files.length; i++)
+            {
+                var file = files[i];
+                //Only pics
+                // if(!file.type.match('image'))
+                if(file.type.match('image.*')){
+                   // alert(this.files[0].size);  
+                    let imgSize = this.files[i].size/1e+6;
+                    //alert(imgSize);
+                    //alert("imageSize ",imgSize);
+                    if( imgSize < 16){    
+                  // continue;
+                    var picReader = new FileReader();
+                    picReader.addEventListener("load",function(event){
+                        var picFile = event.target;
+
+                        var div = document.createElement("div");
+                        //alert(picFile.result);
+                        // div.innerHTML("<h1>helouhuguho</h1>")
+                        // //div.innerHTML("<img class='thumbnail' src='" + picFile.result + "'" +"title='preview image'/>");
+                        // output.insertBefore(div,null);
+                        // div.innerHTML = "<img class='thumbnail' src='" + picFile.result + "'" +
+                        //         "title='preview image'/>";
+                        //output.append("<div class='img-wrap'><span class='close'></span><a target='_blank' href ='"+picFile.result+"'><img src='"+picFile.result+"' class = 'imgvalue' alt = 'image' width='300' height='250'></a></div>");            
+                    });
+                    //Read the image
+                    $('#clear, #result').show();
+                    picReader.readAsDataURL(file);
+                    }else{
+                        alert("Image Size is too big. Minimum size is 15MB.");
+                        $(this).val("");
+                    }
+                }else{
+                alert("You can only upload image file.");
+                $(this).val("");
+            }
+            }                               
+           
+        });
+    }
+    else
+    {
+        console.log("Your browser does not support File API");
+    }
+}
+     $('#id_ajax_upload_form,#cover_img,#logo_img').change(function(e){
+        e.preventDefault();
+        $form = $(this)
+        var formData = new FormData(this);
+        $.ajax({
+            url: window.location.pathname,
+            type: 'POST',
+            data: formData,
+            success: function (response) {
+                if(response.limitExcced){
+                  alert('You have already uploaded 20 images.\nDelete previous images to upload new one');
+                  location.reload(true);
+                    // $("#Gallery_msg").show();
+                    // $("#Gallery_msg").html('You have already uploaded 20 images.<br/>Delete previous images to upload new one');
+                    // //$("#Gallery_msg").html('Photo gallery is full.<br/>First <strong>'+response.LimituploadCount+'</strong> photos are successfully uploaded');
+                    // $("#Gallery_msg").addClass("alert-danger");
+                    // $("#Gallery_msg").removeClass("alert-success");
+                }
+                else if(response.LimituploadCount){
+                    alert('Photo gallery is full.\nFirst '+response.LimituploadCount+' photo successfully uploaded');
+                    // $("#Gallery_msg").show();
+                    location.reload(true);
+                    // $("#Gallery_msg").html('Photo gallery is full.</br>First <strong>'+response.LimituploadCount+'</strong> photos are successfully uploaded');
+                    // $("#Gallery_msg").addClass("alert-danger");
+                    // $("#Gallery_msg").removeClass("alert-success");
+                    // $('#galQuery').append("<b>Appended text</b>");
+                }
+                else if(response.success){
+                  alert('Images are uploaded Successfully');
+                  location.reload(true);
+                    // $("#Gallery_msg").show();
+                    // $("#Gallery_msg").html('Images are uploaded Successfully');
+                    // $("#Gallery_msg").addClass("alert-success");
+                    // $("#Gallery_msg").removeClass("alert-danger");
+                }
+                else{
+                  location.reload(true);
+                }
+            },
+            cache: false,
+            contentType: false,
+            processData: false
+        });
+    });
+
+String.prototype.filename=function(extension){
+    var s= this.replace(/\\/g, '/');
+    s= s.substring(s.lastIndexOf('/')+ 1);
+    return s
+}
+$('.img-wrap .close').on('click', function() {
+    var imgName = $(this).closest('.img-wrap').find('img').attr('src').filename();
+    var div = $(this).closest('.img-wrap');
+    $.ajax({
+       url: "{% url 'end' %}",
+       data:{
+        'imgName':imgName,
+       },
+       dataType:'json',
+       success:function(data){
+         if(data.deleted){
+          div.fadeOut( "slow", function() {
+      // After animation completed:
+          div.remove();
+          });
+         }
+         else{
+           alert("something went wrong");
+         }
+       }
+    });
+    
+    //alert('remove picture: ' + id);
+});
+
+
+    $("#submit").click(function(){
+    var object = {};
+    var myform = document.getElementById("details");
+    var fd = new FormData(myform);
+    fd.forEach((value, key) => {object[key] = value});
+
+      var json = JSON.stringify(object);
+      //console.log(json);
+    $.ajax({
+        url: "{% url 'clg_infoUpdate' %}",
+        data:{'json':json} ,
+        dataType: 'json',
+        success: function (data) {
+          if(data.soon){
+            alert("We will update the data soon");
+            $("#details").trigger("reset");
+            $('#uploadBtn').hide();
+            $("#controls").hide();
+            $("#auth_staff").show();
+            $("#upReset").hide();
+            $("#details :input[type = 'text']").prop("readonly", true);
+            $("#details :input[type = 'number']").prop("readonly", true);
+            $("#details :input[type = 'file']").prop("readonly", true);
+          }
+        }
+    });
+    return false;
+  });
+
+   $('#auth_staff').click(function(){
+      $("#details :input").prop("readonly", false);
+      $("#controls").show();
+      $("#clg_name").focus();
+      $("#upReset").show();
+      $("#auth_staff").hide();
+      $('#uploadBtn').show();
+    });
+    
+    $('input[type = "reset"]').click(function(){
+                        $("#details").trigger("reset");
+                        $('#uploadBtn').hide();
+                        $("#controls").hide();
+                        $("#auth_staff").show();
+                        $("#upReset").hide();
+                        $("#details :input[type = 'text']").prop("readonly", true);
+                        $("#details :input[type = 'number']").prop("readonly", true);
+                        $("#details :input[type = 'file']").prop("readonly", true);
+                    });
+   let i_code = $('#instu_codeF').val();
+   $(".fa-3x").click(function(){
+      $.ajax({
+        url:'{% url "addTo_fav" %}',
+        data:{
+          'instu_code' : i_code,
+        },
+        dataType:'json',
+        success: function(data){
+          if(data.checked){
+            $(".fa-3x").addClass('checked');
+          }
+          else{
+            $(".fa-3x").removeClass('checked');
+          }
+        }
+      });
+      return false();
+   });
+ </script>
+ {% endblock %}
+ </html>

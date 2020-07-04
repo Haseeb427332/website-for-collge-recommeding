@@ -1,0 +1,222 @@
+{% extends 'a.html' %}
+{% block content %}
+<head>
+  <!--  -->
+    <style>
+        .file {
+	 visibility: hidden;
+	 position: absolute;
+}
+/* * Styles for demo only */
+ /* body {
+  background-image: url('https://images.pexels.com/photos/1438072/pexels-photo-1438072.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940');
+  background-repeat: no-repeat;
+  background-attachment: fixed;  
+  background-size: cover;
+  font-family:'Times New Roman', Times, serif
+} */
+#customers {
+  /* font-family: "Trebuchet MS", Arial, Helvetica, sans-serif; */
+  border-collapse: collapse;
+  width: 100%;
+  color: white;
+ 
+}
+
+#customers td, #customers th {
+  border: 2px solid gray;
+  padding: 8px;
+}
+
+#customers tr:nth-child(even){background-color: #f2f2f2;}
+
+
+#customers th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: #FF7708;
+  /* background-color: #4CAF50; */
+  color: white;
+}
+
+.hidden_container{
+  width:100%;
+  margin-left: auto;
+  margin-right: auto;
+  background-color:black;
+	 padding: 4px 8px;
+	 border-radius: 8px;
+   color: white;
+   font-family: Verdana, Geneva, Tahoma, sans-serif;
+
+}
+ .container {
+	 background-color:black;
+	 padding: 40px 80px;
+	 border-radius: 8px;
+   opacity: 0.9;
+}
+ h1 {
+	 color: #fff;
+	 font-size: 4rem;
+	 font-weight: 900;
+	 margin: 0 0 5px 0;
+	 background: -webkit-linear-gradient(#fff, #999);
+	 -webkit-background-clip: text;
+	 -webkit-text-fill-color: transparent;
+	 text-align: center;
+}
+ h4 {
+	 color: #a990cc;
+	 font-size: 24px;
+	 font-weight: 400;
+	 text-align: center;
+	 margin: 0 0 35px 0;
+}
+ .btn.btn-primary {
+	 background-color: #FF7708;;
+	 border-color: #5c4084;
+	 outline: none;
+   
+}
+ .btn.btn-primary:hover {
+	 background-color: #FF7708;;
+	 border-color: #442f62;
+}
+ .btn.btn-primary:active, .btn.btn-primary:focus {
+	 background-color: #FF7708;
+	 border-color: #684895;
+}
+</style>
+<script type="text/javascript">
+
+var _validFileExtensions = [".xls", ".xlsx"];    
+function Validate(oForm) {
+  var clg_details = document.getElementById("clg_details").value;
+  var fees = document.getElementById("fees").value;
+  var cut_off = document.getElementById("cut_off").value;
+  var file_name = oForm.getElementsByTagName
+  if(clg_details == ''){
+    alert("Please Upload College Details xl Sheet");
+    return false;
+    }
+    
+  if(cut_off == ''){
+    alert("Please Upload Cutt_off xl Sheet");
+    return false;}
+  
+  if(fees == ''){
+    alert("Please Upload Fee Structure xl Sheet");
+    return false;}
+  
+
+    var arrInputs = oForm.getElementsByTagName("input");
+    for (var i = 0; i < arrInputs.length; i++) {
+        var oInput = arrInputs[i];
+        if (oInput.type == "file") {
+            var sFileName = oInput.value.replace("C:\\fakepath\\", "");
+            if (sFileName.length > 0) {
+                var blnValid = false;
+                for (var j = 0; j < _validFileExtensions.length; j++) {
+                    var sCurExtension = _validFileExtensions[j];
+                    if (sFileName.substr(sFileName.length - sCurExtension.length, sCurExtension.length).toLowerCase() == sCurExtension.toLowerCase()) {
+                        blnValid = true;
+                        break;
+                    }
+                }                
+                if (!blnValid) {
+                    alert("Sorry, " + sFileName + " is invalid, allowed extensions are: " + _validFileExtensions.join(", "));
+                    return false;
+                }
+            }
+        }
+    }
+    return true;
+}
+</script>
+</head>
+
+<body>
+    <form method="POST" onsubmit="return Validate(this);"enctype="multipart/form-data" action="/xl_upload/">
+        {% csrf_token %}
+    <script>
+    $(document).on('click', '.browse', function(){
+        var file = $(this).parent().parent().parent().find('.file');
+        file.trigger('click');
+      });
+      $(document).on('change', '.file', function(){
+        $(this).parent().find('.form-control').val($(this).val().replace("C:\\fakepath\\", ''));
+      });</script>
+<div class="container">
+  <div class="form-group">
+    <input type="file" name="clg_details" id = "clg_details" class="file">
+    <div class="input-group col-xs-12">
+      <span class="input-group-addon"><i class="glyphicon glyphicon-file"></i></span>
+      <input type="text" class="form-control input-lg" disabled placeholder="College Details                                                                                                          Upload .xls or .xlsx file">
+      <span class="input-group-btn">
+        <button class="browse btn btn-primary input-lg" type="button"><i class="glyphicon glyphicon-search"></i> Browse</button>
+      </span>
+    </div>
+  </div>
+  <div class="form-group">
+    <input type="file" name="cut_off" id = "cut_off" class="file">
+    <div class="input-group col-xs-12">
+      <span class="input-group-addon"><i class="glyphicon glyphicon-file"></i></span>
+      <input type="text" class="form-control input-lg" disabled placeholder="Cut_off                                                                                                                      Upload .xls or .xlsx file">
+      <span class="input-group-btn">
+        <button class="browse btn btn-primary input-lg" type="button"><i class="glyphicon glyphicon-search"></i> Browse</button>
+      </span>  
+    </div>
+  </div>
+  <div class="form-group">
+    <input type="file" name="fees" id = "fees" class="file">
+    <div class="input-group col-xs-12">
+      <span class="input-group-addon"><i class="glyphicon glyphicon-file"></i></span>
+      <input type="text" class="form-control input-lg" disabled placeholder="Fee Structure                                                                                                             Upload .xls or .xlsx file">
+      <span class="input-group-btn">
+        <button class="browse btn btn-primary input-lg" type="button"><i class="glyphicon glyphicon-search"></i> Browse</button>
+      </span>
+    </div>
+  </div>
+  <button type="submit" class="btn btn-primary btn-lg btn-block">Upload</button>
+</div>
+</form>
+    
+{% if UnOrdered %}
+<div class="hidden_container">
+  <div class="form-group">
+    <img src="https://cdn.clipart.email/2ceac67f0d8d380b5e94c1a02be837e0_red-x-cross-wrong-not-clip-art-at-clkercom-vector-clip-art-_600-600.png"  width="32" height="42" style="display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 5%;">
+  <p style="text-align: center;">Excel file column order ERROR </p><br><p> Your {{ file_name }} file column order: <br></p>
+  <table id="customers"><tr>
+  {% for x in UnOrdered %}
+   <th>{{ x }}</th>
+  {% endfor %}</tr>
+</table><br>
+  <p>Column Order and Fields Names of ' {{ file_name }} ' file should be :</p> 
+  <table id="customers" ><tr>
+  {% for i in preOrdered %}
+		<th>{{  i  }}</th>
+  {% endfor %}</tr>
+  {% endif %}
+  {% if uploaded_file_url %}
+  <div class="alert alert-success w-75 m-auto" role="alert">
+    {{ uploaded_file_url }}
+  </div>
+  {% endif %}
+  {% if stf %}  
+    <div class="alert alert-danger w-75 m-auto" role="alert">
+      It looks like you put another Institute code which is not asign to your college.<br/>
+      Please check Error at:<br/> 
+      file name : "{{ fa_name }}" <br/>
+      Line number : {{ line_no }} <br/>
+      Actual Institute-code : <strong>{{ request.user.staff_clg_code }}</strong> and in Excel file : <strong>{{ err_instu_code }}</strong>
+    </div>
+    {% endif %}
+  </div>
+  </div>
+{% endblock %}
+</body>

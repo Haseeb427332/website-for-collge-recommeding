@@ -1,0 +1,55 @@
+{% extends 'a.html' %}
+{% block content %}
+    {%if sr %}
+    <form method = "POST" id = "searchForm" action="/detailpage/">
+        {% csrf_token %} 
+    {% for i in sr %}
+    <div class="alert alert-success row w-75 m-auto">
+        <div class="col-10">
+            {{i.clg_name}}
+        </div>
+        <div class="col-2 row w-100 m-auto" align="center">
+            <button class="btn btn btn-outline-success" id = "onclick1" onClick="append1({{i.clg_id}})" type="submit">View</button>
+        </div>
+    </div>
+    {% endfor %}
+    {% else %}
+    <div class="alert alert-success">
+        <h3>No results found</h3>
+    </div>
+
+    {% endif %}
+    <input type="text" id = "code" value = "hello" name = "instu_code" hidden>
+    <script>
+        //();
+//         var s =$('#code').val();
+//             alert(s);
+//         $('#onclick1').click( function(){
+//             var s =$('#code').val();
+//             alert(s);
+//   //alert('You clicked ' + row);
+// });
+        function append1(id){
+                document.getElementById("code").value = id;
+                var s =$('#code').val();
+        }
+        let x = 1;
+    $("form#searchForm").submit(function (e) {
+      e.preventDefault();
+      var self = this;
+      $.ajax({
+        url: '/validate_username/',
+        dataType: 'json',
+    }).done(function(data){
+      if(data.is_taken != ''){
+        self.submit();
+      }
+      else{
+        alert('Please login first');
+      }
+    });
+    });
+
+    </script>
+    </form>
+{% endblock content %}

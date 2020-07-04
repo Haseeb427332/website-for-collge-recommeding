@@ -1,0 +1,49 @@
+{% extends 'a.html' %}
+{% block title %}Sign-up{% endblock %}
+{% block content %}
+<head>
+  <title> 
+    College suggestor 
+</title> 
+  
+<link rel = "icon" href =  "static\logo.jpg" type = "image/x-icon"> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<div class="row">
+  <div class="col-lg-12 col-xs-12 col-md-12">
+    <div class="container">
+      <div class="jumbotron" style="background: transparent;">
+        <div class="col-md-8 offset-md-2">
+          <div class="card card-outline-secondary mt-2 ml-auto mr-auto w-100">
+              <div class="card-header">
+                  <h3 class="mb-0">Create a new account</h3>
+              </div>
+            <div class="card-body">
+            <form method="post">
+              {% csrf_token %}
+                {% for field in form %}
+                <div class="form-group">
+                    <label>{{ field.label_tag }}</label>
+                    <input type="{{ field.field.widget.input_type }}" class="form-control" name="{{ field.name }}" required>
+                    {% if field.help_text %}
+                    <span class="form-text small text-muted">{{ field.help_text }}</span>
+                  {% endif %}
+                  {% for error in field.errors %}
+                  <span class="form-text small text-danger mt-2">
+                      {{ error }}
+                    </span>
+                  {% endfor %}
+                </div>
+                {% endfor %}
+                <div class="form-group">
+                  <button type="submit" class="btn btn-success btn-block">Sign up</button>
+              </div>
+            </form>
+            </div>
+            </div>
+            </div>
+      </div>
+    </div>
+  </div>
+  </div>
+{% endblock %}

@@ -1,0 +1,117 @@
+{% load static %}
+<head>
+  <title> 
+    College suggestor 
+</title> 
+  
+<link rel = "icon" href =  "static\logo.jpg" type = "image/x-icon"> 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+      body{
+        background-image: url('https://images.pexels.com/photos/1438072/pexels-photo-1438072.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940');	 /*background: #333;*/
+     background-size:cover;
+     background-repeat: no-repeat;
+  background-attachment: fixed;
+      /* background: -webkit-linear-gradient(left, #3931af, #00c6ff); */
+  }
+        .btn{
+  background-color: #FF7708;
+  color: white;
+}
+.btn-a {        
+        /* font-size: 15px; */
+        color: black;
+        /* font-weight: bold; */
+    }
+    /* .left{ width: 600px; margin: 15px auto; position: relative; }
+    .right{width: 190px; position: fixed; left: 50%; top: 90px; margin: 0 0 0 110px;} */
+    .left{position: fixed; float: left;}
+    .right{margin-left: 30%;}
+
+#scroll{
+overflow-y:scroll;
+max-height: 600px;
+/* height:600px; */
+}
+#btn{
+  background-color: #FF7708;
+  color: white;
+}
+.myHeader{
+    position: fixed;
+    top: 0;
+  width: 100%;
+  z-index:1000;
+
+}
+    </style>
+    <script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
+    <script src='https://code.jquery.com/jquery-3.2.1.min.js'></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script> -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"> -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src='https://kit.fontawesome.com/a076d05399.js'></script>
+<!--  -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<header class="myHeader">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark" id="nav">
+    <a class="navbar-brand" href="{% url 'index' %}">College Suggestor</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+          <a class="nav-link" href="{% url 'index' %}">Home <span class="sr-only">(current)</span></a>
+        </li>
+      <li><form class="form-inline my-2 my-lg-0" id="serchForm" method="POST" onsubmit="return changefunc()" action="/search/">
+        {% csrf_token %}
+        <input class="form-control mr-lg-2" type="search" name="srch" id="clg_searching" placeholder="Enter College name or District name" aria-label="Search" style="width:550">
+        <button class="btn" type="submit"style="background-color: #FF7708;color: antiquewhite;">Search</button>
+      </form> 
+      </li>
+    </ul>
+    {% if not user.username %}
+            <ul class="nav navbar-nav navbar-right" >   
+         <li><button class="btn" style="width:100px;background-color:white;color:black"><a href="/login/" >Login</a></button></li>
+      </ul>
+      {% else %}
+      <ul class="nav navbar-nav navbar-right" >
+        {% if request.user.is_superuser %}
+        <li class="mr-3 pt-2 text-white">Welcome <a class="btn" style="width: 115px;background-color: white;color:black" id = "link" href = "{% url 'admin_panel' %}">{{user.username}}</a></li>
+        {% elif request.user.is_staff %}
+        <li class="mr-3 pt-2 text-white">Welcome <a class="btn" style="width:115px;background-color:white;color:black" id = "link" href = "{% url 'admin_panel' %}">{{user.username}}</a></li>
+        {% else %}
+        <li class="mr-3 pt-2 text-white">Welcome <a class="btn" style="width:100px;background-color:white;color:black" id = "link" href = "{% url 'profile' %}">{{user.username}}</a></li>
+        {% endif %}
+        <li class="mr-3 pt-2 text-white"><button class="btn" style="width:100px;background-color:white;color:black"><a style="color:black" href="/users/user_logout" >Logout</a></button></li>
+     </ul>
+      {% endif %}
+    </div>
+  </nav>
+  
+</header>
+<script>
+  function changefunc(){
+    let word = $('#clg_searching').val();
+    if(word.length == 0){
+      alert("Please enter something..");
+      return false;
+    }
+    else{
+      return true;
+    }
+  }
+  // $('#clg_searching').change(function(e){
+  //   let word = $('#clg_searching').val();
+  //   alert(word.length);
+  // console.log($('#clg_searching').val());
+  // });
+</script>
+<br><br><br>
+  {% block content %}
+        {% endblock %}

@@ -1,0 +1,172 @@
+<head>
+    <style>
+    @import url(https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i);
+    @media print {
+        body {
+          background-image: url('https://images.pexels.com/photos/1438072/pexels-photo-1438072.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940');
+           /* content:url("/static/my_app/clg_finder/Admin_login_bg.jpg"); */
+          }
+        }
+        
+     .main {
+         position: relative;
+         top: 10%;
+         left: 30%;
+         max-width: 450px;
+         margin: 0 auto;
+         max-height:inherit;
+	-webkit-box-shadow: 31px 16px 15px -4px rgba(0,0,0,0.83);
+-moz-box-shadow: 31px 16px 15px -4px rgba(0,0,0,0.83);
+box-shadow: 31px 16px 15px -4px rgba(0,0,0,0.83);
+    background: rgba(0,0,0, 0.9); 
+
+    }
+     .main > div {
+       width: 80%;
+      margin-left: auto;
+         margin-right: auto;
+         position: relative;
+         background: white;
+         border-bottom: 1px solid #ccc;
+    }
+     .main > div > label {
+      margin-left: auto;
+         margin-right: auto;
+         opacity: 0.7;
+         /*font-weight: bold;*/
+         position: absolute;
+         top: 10px;
+         left: 20px;
+    }
+    .main  > div > input[type="text"], .main > div > input[type="email"], .main  > div > input[type="password"] {
+         width: 100%;
+         margin-left: auto;
+         margin-right: auto;
+         font-size: large;
+         font-family: inherit;
+         height:1cm;
+         border: 0;
+         padding: 20px 20px 20px 50px;
+         background: #eee;
+         text-align: left;
+         
+    }
+     .main > div > input[type="text"]:focus, .main > div > input[type="email"]:focus, .main > div > input[type="password"]:focus {
+         outline: 0;
+         
+         
+    }
+     .main > div > input[type="text"]:focus + label, .main > div > input[type="email"]:focus + label, .main > div > input[type="password"]:focus + label {
+         opacity: 0;
+    }
+     /* form > div > input[type="text"]:valid, form > div > input[type="email"]:valid, form > div > input[type="password"]:valid {
+         background: url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/3/check.svg);
+         background-size: 20px;
+         background-repeat: no-repeat;
+         background-position: 20px 20px;
+    } */
+     .main > div > input[type="text"]:valid + label, .main > div > input[type="email"]:valid + label, .main > div > input[type="password"]:valid + label {
+         opacity: 0;
+    }
+     .main > div > input[type="text"]:invalid:not(:focus):not(:placeholder-shown), .main > div > input[type="email"]:invalid:not(:focus):not(:placeholder-shown), .main > div > input[type="password"]:invalid:not(:focus):not(:placeholder-shown) {
+         background: pink;
+    }
+     .main > div > input[type="text"]:invalid:not(:focus):not(:placeholder-shown) + label, .main > div > input[type="email"]:invalid:not(:focus):not(:placeholder-shown) + label, .main > div > input[type="password"]:invalid:not(:focus):not(:placeholder-shown) + label {
+         opacity: 0;
+    }
+     .main > div > input[type="text"]:invalid:focus:not(:placeholder-shown) ~ .requirements, .main > div > input[type="email"]:invalid:focus:not(:placeholder-shown) ~ .requirements, .main > div > input[type="password"]:invalid:focus:not(:placeholder-shown) ~ .requirements {
+         max-height: 200px;
+         padding: 0 30px 20px 50px;
+    }
+     .main > div .requirements {
+         padding: 0 30px 0 50px;
+         color: #999;
+         max-height: 0;
+         transition: 0.28s;
+         overflow: hidden;
+         color: red;
+         font-style: italic;
+    }
+     .main input[type="submit"] {
+
+         display: block;
+         width: 80%;
+         margin-left: auto;
+         margin-right: auto;
+         background:inherit;
+         color: white;
+         border: 2px;
+         padding: 20px;
+         font-size: 1.2rem;
+    }
+     body {
+         /* background-image: url("/static/my_app/clg_finder/Admin_login_bg.jpg"); */
+         background-image: url('https://images.pexels.com/photos/1438072/pexels-photo-1438072.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940');
+         /*background: #333;*/
+         background-size: cover;
+         font-family: 'PT Sans', sans-serif;
+         /* padding: 20px; */
+    }
+    h1 {
+        font-size: 3em;
+        text-align: center;
+        color:#FF7708;
+        font-weight: 100;
+        text-transform: capitalize;
+        letter-spacing: 4px;
+        font-family: 'Roboto', sans-serif;
+      }
+      p{
+        text-align: center;
+        color: #fff;
+        font-weight: 100;
+      }
+    </style>
+    <script src='https://kit.fontawesome.com/a076d05399.js'></script>
+    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css"> -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    </head>
+    {% extends "a.html" %}
+  {% block content %}
+    <body>
+     <br>
+     
+    <!-- <form method="post" onSubmit="return validatePassword()"> -->
+        <form method="post" action="/users/u_login/" class="main">
+        {% csrf_token %}
+        <br>
+        <p>{{error}}</p>
+        <h1 style="color: #FF7708;">Member Login</h1>
+        <br><br>
+        <div class="container">
+          <input type="email" id="email" name="email" required placeholder=" " />
+          <label for="email">Email Address</label>
+          <div class="requirements">
+            Must be a valid email address.
+          </div>
+        </div>
+        <br><br>
+        <div>
+        <input type="password" id="password" name="password" required placeholder=" "/>
+      <label for="password">Password</label>
+    </div>
+    <br><br>
+            <input type="submit" style="color: #FF7708; border-color: #FF7708;" value="Sign In" name="submito" />
+        
+        <p>Not a Member Yet! <a href="/users/">  Join Us</a></p>
+        <p><a href="{% url 'password_reset' %}">forget password??</a></p><br><br>
+      </form>
+      <script>
+        function validatePassword() {
+    var pass1 = document.getElementById("password").value;
+    var pass2 = document.getElementById("confirm_password").value;
+    pass1 != pass2 ? document.getElementById("confirm_password").setCustomValidity("Passwords don't Match") : document.getElementById("confirm_password").setCustomValidity('');
+    }
+    document.getElementsByName("submito")[0].onclick = validatePassword;
+    </script>
+    {% endblock %}
+    </body>
+    

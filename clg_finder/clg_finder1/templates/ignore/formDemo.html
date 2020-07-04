@@ -1,0 +1,197 @@
+{% extends 'a.html' %}
+{% block content %}
+<html>
+  <head>
+     <title> Django image and file upload using ajax </title>
+     <style>
+         
+body{
+    font-family: 'Segoe UI';
+    font-size: 12pt;
+}
+
+header h1{
+    font-size:12pt;
+    color: #fff;
+    background-color: #1BA1E2;
+    padding: 20px;
+
+}
+article
+{
+    width: 80%;
+    margin:auto;
+    margin-top:10px;
+}
+
+
+.thumbnail{
+
+    height: 100px;
+    margin: 10px; 
+    float: left;
+}
+#clear{
+   display:none;
+}
+#result {
+    border: 4px dotted #cccccc;
+    display: none;
+    float: right;
+    margin:0 auto;
+    width: 511px;
+}
+     </style>
+  </head>
+<body>
+    <!-- /clg_finder/end/ -->
+    <form 
+    enctype="multipart/form-data"
+    id="id_ajax_upload_form" method="POST" action="/clg_finder/end/"
+    novalidate="" style="background-color: white;">
+      {% csrf_token %}
+      <header>
+        <h1>File API - FileReader</h1>
+    </header>
+    <article>
+        <label for="files">Select multiple files: </label>
+        <input id="files" type="file" name="multi" multiple/>
+        <input type="text" name = "flag" value="g"/>
+      <button type="button" id="clear">Clear</button>
+        <output id="result"/>
+    </article>
+    <button type="submit">submit</button>
+    </form>
+    <form 
+    enctype="multipart/form-data"
+    id="logo" method="POST" action="/clg_finder/end/"
+    novalidate="" style="background-color: white;">
+      {% csrf_token %}
+      <header>
+        <h1>File API - FileReader</h1>
+    </header>
+    <article>
+        <label for="files">Select multiple files: </label>
+        <input id="files" type="file" name="cover" multiple/>
+        <input type="text" name = "flag" value="c"/>
+      <button type="button" id="clear">Clear</button>
+        <output id="result"/>
+    </article>
+    <button type="submit">submit</button>
+    </form>
+    <div id = "Gallery_msg" class="alert" style="display: none;">
+        Photo gallery is full.</br>
+        First <strong id = 'uploadCount'></strong> photos are successfully uploaded 
+    </div>
+   <script 
+   src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+   <script type="text/javascript">
+   window.onload = function(){   
+    //Check File API support
+    if(window.File && window.FileList && window.FileReader)
+    {
+        //alert("hello");
+        $('#files').on("change", function(event) {
+          //  alert("hello");
+            var files = event.target.files; //FileList object
+            var output = document.getElementById("result");
+            for(var i = 0; i< files.length; i++)
+            {
+                var file = files[i];
+                //Only pics
+                // if(!file.type.match('image'))
+                if(file.type.match('image.*')){
+                   // alert(this.files[0].size);  
+                    let imgSize = this.files[i].size/1e+6;
+                    //alert(imgSize);
+                    //alert("imageSize ",imgSize);
+                    if( imgSize < 16){    
+                  // continue;
+                    var picReader = new FileReader();
+                    picReader.addEventListener("load",function(event){
+                        var picFile = event.target;
+                        alert(picFile.result);
+                        var div = document.createElement("div");
+                        div.innerHTML = "<img class='thumbnail' src='" + picFile.result + "'" +
+                                "title='preview image'/>";
+                        output.insertBefore(div,null);            
+                    });
+                    //Read the image
+                    $('#clear, #result').show();
+                    picReader.readAsDataURL(file);
+                    }else{
+                        alert("Image Size is too big. Minimum size is 15MB.");
+                        $(this).val("");
+                    }
+                }else{
+                alert("You can only upload image file.");
+                $(this).val("");
+            }
+            }                               
+           
+        });
+    }
+    else
+    {
+        console.log("Your browser does not support File API");
+    }
+}
+
+// //    $('#files').on("click", function() {
+// //         $('.thumbnail').parent().remove();
+// //         $('result').hide();
+// //         $(this).val("");
+// //     });
+
+// //     $('#clear').on("click", function() {
+//         $('.thumbnail').parent().remove();
+//         $('#result').hide();
+//         $('#files').val("");
+//         $(this).hide();
+//     });
+// function thresome(){
+
+// }
+    $('#id_ajax_upload_form,#logo').change(function(e){
+        e.preventDefault();
+        // $form = $(this)
+        var formData = new FormData(this);
+        $.ajax({
+            url: window.location.pathname,
+            type: 'POST',
+            data: formData,
+            success: function (response) {
+                if(response.limitExcced){
+                    $("#Gallery_msg").show();
+                    $("#Gallery_msg").html('You have already uploaded 20 images.<br/>Delete previous images to upload new one');
+                    //$("#Gallery_msg").html('Photo gallery is full.<br/>First <strong>'+response.LimituploadCount+'</strong> photos are successfully uploaded');
+                    $("#Gallery_msg").addClass("alert-danger");
+                    $("#Gallery_msg").removeClass("alert-success");
+                }
+                else if(response.LimituploadCount){
+                    $("#Gallery_msg").show();
+                    $("#Gallery_msg").html('Photo gallery is full.</br>First <strong>'+response.LimituploadCount+'</strong> photos are successfully uploaded');
+                    $("#Gallery_msg").addClass("alert-danger");
+                    $("#Gallery_msg").removeClass("alert-success");
+
+                }
+                else if(response.success){
+                    $("#Gallery_msg").show();
+                    $("#Gallery_msg").html('Images are uploaded Successfully');
+                    $("#Gallery_msg").addClass("alert-success");
+                    $("#Gallery_msg").removeClass("alert-danger");
+                }
+                else{
+                    window.location = ""
+                }
+            },
+            cache: false,
+            contentType: false,
+            processData: false
+        });
+    });
+    // end
+   </script>
+</body>
+</html>
+{% endblock content %}

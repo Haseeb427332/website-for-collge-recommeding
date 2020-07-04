@@ -1,0 +1,52 @@
+from django.db import models
+from django.contrib import admin
+from django.db import IntegrityError
+class temp(models.Model):
+    Orign_clg_id = models.IntegerField()
+    clg_id = models.IntegerField()
+    clg_name = models.CharField(max_length=1000)
+    District = models.CharField(max_length=20)
+    University = models.CharField(max_length=100)
+    contact_details = models.TextField()
+    rdate = models.DateField(auto_now_add= True,null=True)
+class clg_details(models.Model):
+    clg_id = models.IntegerField(primary_key=True)
+    clg_name = models.CharField(max_length=1000)
+    District = models.CharField(max_length=20)
+    University = models.CharField(max_length=100)
+    contact_details = models.TextField()
+class cut_off(models.Model):
+    clg_id = models.IntegerField()
+    #clg_id = els.ForeignKey(clg_details, on_delete=models.CASCADE)
+    Department = models.CharField(max_length=300)
+    Intake = models.IntegerField()
+    GOPENS = models.CharField(max_length=20)
+    GSCS = models.CharField(max_length=20)
+    GSTS = models.CharField(max_length=20)
+    GVJS = models.CharField(max_length=20)
+    GNT1S = models.CharField(max_length=20)
+    GNT2S = models.CharField(max_length=20)
+    GNT3S = models.CharField(max_length=20)
+    GOBCS = models.CharField(max_length=20)
+    LOPENS = models.CharField(max_length=20)
+    LSCS = models.CharField(max_length=20)
+    LSTS = models.CharField(max_length=20)
+    LVJS = models.CharField(max_length=20)
+    LNT1S = models.CharField(max_length=20)
+    LNT2S = models.CharField(max_length=20)
+    LNT3S = models.CharField(max_length=20)
+    LOBCS = models.CharField(max_length=20)
+class fees(models.Model):
+    clg_id_id = models.IntegerField()
+    #clg_id = models.ForeignKey(clg_details, on_delete=models.CASCADE)
+    open = models.CharField(max_length=20)
+    obc = models.CharField(max_length=20)
+    sc = models.CharField(max_length=20)
+    st = models.CharField(max_length=20)
+    sbc = models.CharField(max_length=20)
+    vj = models.CharField(max_length=20)
+    nt = models.CharField(max_length=20)
+class authentic(models.Model):
+    username = models.CharField(max_length=30)
+    password = models.CharField(max_length=30)
+
